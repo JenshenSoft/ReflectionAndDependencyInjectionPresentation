@@ -1,14 +1,15 @@
 package com.jenshen.reflection.model;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Vacancies implements Serializable, Cloneable {
 
+    private static int countOfIOsDevelopers = 2;
     private final int countOfVacancies;
-
     private long countOfAndroidDevelopers = 32l;
-
-    private long countOfIOsDevelopers;
 
     public Vacancies(int countOfVacancies) {
         this.countOfVacancies = countOfVacancies;
@@ -23,7 +24,12 @@ public class Vacancies implements Serializable, Cloneable {
         return 0;
     }
 
-    protected long findAndroidDeveloper(String[] capabilities) {
+    protected long findAndroidDeveloper(@NonNull String[] capabilities) {
         return countOfAndroidDevelopers;
+    }
+
+    @CheckResult
+    public int getCountOfVacancies() {
+        return countOfVacancies;
     }
 }

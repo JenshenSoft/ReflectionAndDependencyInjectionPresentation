@@ -1,8 +1,5 @@
 package com.jenshen.reflection;
 
-import android.util.Log;
-
-import com.jenshen.reflection.model.Jelvix;
 import com.jenshen.reflection.model.Vacancies;
 
 import java.lang.annotation.Annotation;
@@ -13,7 +10,8 @@ import java.lang.reflect.Modifier;
 
 public class ReflectionFeature {
 
-    public void getClassInfo(Vacancies vacancies) throws IllegalAccessException, InstantiationException {
+    public String getClassInfo(Vacancies vacancies) throws IllegalAccessException, InstantiationException {
+        StringBuilder stringBuilder = new StringBuilder();
         Object object;
         if (vacancies == null) {
             object = Vacancies.class.newInstance();
@@ -24,57 +22,80 @@ public class ReflectionFeature {
 
         // выводим название пакета
         Package p = clazz.getPackage();
-        showLog("package " + p.getName() + ";");
+        stringBuilder.append("package ").append(p.getName()).append(";").append("\n");
 
         // начинаем декларацию класса с модификаторов
         int modifiers = clazz.getModifiers();
-        showLog(getModifiers(modifiers));
+        stringBuilder.append(getModifiers(modifiers));
         // выводим название класса
-        showLog("class " + clazz.getSimpleName() + " ");
+        stringBuilder.append("class ").append(clazz.getSimpleName()).append(" ").append("\n");
 
         // выводим название родительского класса
-        showLog("extends " + clazz.getSuperclass().getSimpleName() + " ");
+        stringBuilder.append("extends ").append(clazz.getSuperclass().getSimpleName()).append(" ").append("\n");
 
         // выводим интерфейсы, которые реализует класс
         Class[] interfaces = clazz.getInterfaces();
         for (int i = 0, size = interfaces.length; i < size; i++) {
-            showLog(i == 0 ? "implements " : "");
-            showLog(interfaces[i].getSimpleName());
+            stringBuilder.append(i == 0 ? "implements " : "");
+            stringBuilder.append(interfaces[i].getSimpleName());
         }
-        showLog("{");
+        stringBuilder.append("\n").append("{").append("\n");
 
         // выводим поля класса
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            showLog(getModifiers(field.getModifiers())
-                    + getType(field.getType()) + " " + field.getName() + " = "  + ";");
+            field.setAccessible(true);
+            stringBuilder.append(getModifiers(field.getModifiers()))
+                    .append(getType(field.getType()))
+                    .append(" ")
+                    .append(field.getName())
+                    .append(" = ")
+                    .append(field.get(vacancies))
+                    .append(";")
+                    .append("\n");
         }
-
+        stringBuilder.append("\n");
         // выводим констукторы класса
         Constructor[] constructors = clazz.getDeclaredConstructors();
         for (Constructor c : constructors) {
-            showLog(getModifiers(c.getModifiers()) +
-                    clazz.getSimpleName() + "(" + getParameters(c.getParameterTypes()) + ") { }");
+            stringBuilder.append(getModifiers(c.getModifiers()))
+                    .append(clazz.getSimpleName())
+                    .append("(")
+                    .append(getParameters(c.getParameterTypes()))
+                    .append(") { }")
+                    .append("\n");
         }
-
         // выводим методы класса
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method m : methods) {
-            // получаем аннотации
-            Annotation[] annotations = m.getAnnotations();
-            for (Annotation a : annotations)
-                showLog("@" + a.annotationType().getSimpleName() + " \n");
+        stringBuilder.append(getMethods(clazz.getDeclaredMethods()));
 
-            showLog(getModifiers(m.getModifiers()) +
-                    getType(m.getReturnType()) + " " + m.getName() + "(" + getParameters(m.getParameterTypes()) + ") { }");
-        }
+        stringBuilder.append("\n").append("}");
+        return stringBuilder.toString();
+    }
 
-        showLog("}");
+   public String getMethods(Method[] methods) {
+       StringBuilder stringBuilder = new StringBuilder();
+       for (Method m : methods) {
+           // получаем аннотации
+           Annotation[] annotations = m.getDeclaredAnnotations();
+           for (Annotation a : annotations)
+               stringBuilder.append("@").append(a.annotationType().getSimpleName()).append(" \n");
+
+           stringBuilder.append(getModifiers(m.getModifiers()))
+                   .append(getType(m.getReturnType()))
+                   .append(" ")
+                   .append(m.getName())
+                   .append("(")
+                   .append(getParameters(m.getParameterTypes()))
+                   .append(") { }");
+       }
+       return stringBuilder.toString();
     }
 
     public String getModifiers(int m) {
         String modifiers = "";
         if (Modifier.isPublic(m)) modifiers += "public ";
+        if (Modifier.isFinal(m)) modifiers += "final ";
+        if (Modifier.isStatic(m)) modifiers += "static ";
         if (Modifier.isProtected(m)) modifiers += "protected ";
         if (Modifier.isPrivate(m)) modifiers += "private ";
         if (Modifier.isStatic(m)) modifiers += "static ";
@@ -99,26 +120,15 @@ public class ReflectionFeature {
         return p;
     }
 
-    private void showLog(String message) {
-        Log.i("Reflection test", message);
+    public void changeCountOfDevelopers(Vacancies vacancies, int count) throws NoSuchFieldException, IllegalAccessException {
+        Class ftClass = vacancies.getClass();
+        Field f1 = getField(ftClass, "countOfVacancies");
+        f1.set(vacancies, count);
     }
 
-    public void changeCountOfDevelopers(Vacancies vacancies, int count) {
-        try {
-            Class ftClass = vacancies.getClass();
-            Field field = ftClass.getDeclaredField("countOfIOsDevelopers");
-        //    field.set(vacancies, (Integer) field.get(vacancies) + count);
-
-            field.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(null, 3);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Field getField(Class clazz, String name) throws NoSuchFieldException {
+        Field f1 = clazz.getDeclaredField(name);
+        f1.setAccessible(true);
+        return f1;
     }
 }
