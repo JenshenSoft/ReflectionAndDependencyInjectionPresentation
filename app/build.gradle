@@ -33,6 +33,11 @@ dependencies {
     //rx java
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.14'
-    //java 8
+    //stream
     compile 'com.annimon:stream:1.0.3'
+
+    //dagger 2
+    compile 'com.google.dagger:dagger:2.0'
+    provided 'com.google.dagger:dagger-compiler:2.0'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 }

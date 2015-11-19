@@ -11,12 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jenshen.reflection.injection.AndroidDeveloper;
-import com.jenshen.reflection.injection.JavaDeveloper;
-import com.jenshen.reflection.injection.JavaScriptDeveloper;
-import com.jenshen.reflection.injection.Skill;
 import com.jenshen.reflection.injection.superDagger.Module;
-import com.jenshen.reflection.model.Vacancies;
+import com.jenshen.reflection.models.AndroidDeveloper;
+import com.jenshen.reflection.models.JavaDeveloper;
+import com.jenshen.reflection.models.JavaScriptDeveloper;
+import com.jenshen.reflection.models.Skill;
+import com.jenshen.reflection.models.Vacancies;
 import com.jenshen.reflection.tests.SpeedReflectionTest;
 
 import rx.Observable;
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                                     }
                             );
                 }).show());
-        createDevelopers();
     }
 
     @Override
@@ -112,16 +111,30 @@ public class MainActivity extends AppCompatActivity {
             JavaScriptDeveloper javaScriptDeveloper = new JavaScriptDeveloper();
             javaScriptDeveloper.setSkillFirst(firstSkill);
             javaScriptDeveloper.setSkillSecond(secondSkill);
-            showMessage(javaScriptDeveloper.getSkills(), JavaScriptDeveloper.class);
+
 
             //Constructor Injection
             JavaDeveloper javaDeveloper = new JavaDeveloper(firstSkill, secondSkill);
-            showMessage(javaDeveloper.getSkills(), JavaDeveloper.class);
+
 
             //Runtime Injection
             AndroidDeveloper androidDeveloper = new AndroidDeveloper();
-            showMessage(androidDeveloper.getSkills(), AndroidDeveloper.class);
 
+
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(JavaScriptDeveloper.class.getSimpleName())
+                    .append(": ")
+                    .append(javaScriptDeveloper.getSkills())
+                    .append("\n");
+            stringBuilder.append(JavaDeveloper.class.getSimpleName())
+                    .append(": ")
+                    .append(javaDeveloper.getSkills())
+                    .append("\n");
+            stringBuilder.append(AndroidDeveloper.class.getSimpleName())
+                    .append(": ")
+                    .append(androidDeveloper.getSkills());
+            info_textView.setText(stringBuilder.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

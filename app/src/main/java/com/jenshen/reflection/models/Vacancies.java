@@ -1,4 +1,4 @@
-package com.jenshen.reflection.model;
+package com.jenshen.reflection.models;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;

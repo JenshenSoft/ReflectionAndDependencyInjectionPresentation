@@ -1,7 +1,7 @@
 package com.jenshen.reflection.injection.superDagger;
 
 import com.annimon.stream.Stream;
-import com.jenshen.reflection.injection.Skill;
+import com.jenshen.reflection.models.Skill;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

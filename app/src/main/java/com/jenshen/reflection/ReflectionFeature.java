@@ -1,6 +1,6 @@
 package com.jenshen.reflection;
 
-import com.jenshen.reflection.model.Vacancies;
+import com.jenshen.reflection.models.Vacancies;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -20,20 +20,23 @@ public class ReflectionFeature {
         }
         Class clazz = object.getClass();
 
-        // выводим название пакета
         Package p = clazz.getPackage();
-        stringBuilder.append("package ").append(p.getName()).append(";").append("\n");
+        stringBuilder.append("package ")
+                .append(p.getName())
+                .append(";")
+                .append("\n");
 
-        // начинаем декларацию класса с модификаторов
+
         int modifiers = clazz.getModifiers();
         stringBuilder.append(getModifiers(modifiers));
-        // выводим название класса
         stringBuilder.append("class ").append(clazz.getSimpleName()).append(" ").append("\n");
 
-        // выводим название родительского класса
-        stringBuilder.append("extends ").append(clazz.getSuperclass().getSimpleName()).append(" ").append("\n");
+        stringBuilder.append("extends ")
+                .append(clazz.getSuperclass().getSimpleName())
+                .append(" ")
+                .append("\n");
 
-        // выводим интерфейсы, которые реализует класс
+
         Class[] interfaces = clazz.getInterfaces();
         for (int i = 0, size = interfaces.length; i < size; i++) {
             stringBuilder.append(i == 0 ? "implements " : "");
@@ -41,7 +44,6 @@ public class ReflectionFeature {
         }
         stringBuilder.append("\n").append("{").append("\n");
 
-        // выводим поля класса
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -55,7 +57,7 @@ public class ReflectionFeature {
                     .append("\n");
         }
         stringBuilder.append("\n");
-        // выводим констукторы класса
+
         Constructor[] constructors = clazz.getDeclaredConstructors();
         for (Constructor c : constructors) {
             stringBuilder.append(getModifiers(c.getModifiers()))
@@ -65,7 +67,7 @@ public class ReflectionFeature {
                     .append(") { }")
                     .append("\n");
         }
-        // выводим методы класса
+
         stringBuilder.append(getMethods(clazz.getDeclaredMethods()));
 
         stringBuilder.append("\n").append("}");
@@ -75,7 +77,6 @@ public class ReflectionFeature {
    public String getMethods(Method[] methods) {
        StringBuilder stringBuilder = new StringBuilder();
        for (Method m : methods) {
-           // получаем аннотации
            Annotation[] annotations = m.getDeclaredAnnotations();
            for (Annotation a : annotations)
                stringBuilder.append("@").append(a.annotationType().getSimpleName()).append(" \n");

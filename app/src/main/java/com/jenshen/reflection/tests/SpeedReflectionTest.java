@@ -2,7 +2,7 @@ package com.jenshen.reflection.tests;
 
 import android.util.Log;
 
-import com.jenshen.reflection.model.Jelvix;
+import com.jenshen.reflection.models.Jelvix;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
 
 public class SpeedReflectionTest {
     public static final int LOOPS_IN_STEP_COUNT = 10_000_000;
+    private Jelvix jelvix = new Jelvix();
 
     public void addDeveloper_changeField() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < LOOPS_IN_STEP_COUNT; i++) {
@@ -23,7 +23,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloperWithReflection_changeField() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         try {
             Class ftClass = jelvix.getClass();
@@ -40,7 +39,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloperWithReflection_changeFieldAccessible() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         try {
             Class ftClass = jelvix.getClass();
@@ -58,7 +56,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloper_callMethod() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < LOOPS_IN_STEP_COUNT; i++) {
@@ -69,7 +66,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloperWithReflection_callMethod() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         try {
             Class ftClass = jelvix.getClass();
@@ -86,7 +82,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloperWithReflection_callMethodWithAccessible() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         try {
             Class ftClass = jelvix.getClass();
@@ -103,10 +98,7 @@ public class SpeedReflectionTest {
         }
     }
 
-    /*
-
-    public void addDeveloperWithOutReflection_decorator() {
-        Jelvix jelvix = new Jelvix();
+    /*public void addDeveloperWithOutReflection_decorator() {
         jelvix.reset();
         IJelvix jelvixDecorator = new JelvixDecorator(jelvix);
         long startTime = System.currentTimeMillis();
@@ -118,7 +110,6 @@ public class SpeedReflectionTest {
     }
 
     public void addDeveloperWithReflection_decorator() {
-        Jelvix jelvix = new Jelvix();
         jelvix.reset();
         IJelvix jelvixDecorator = new JelvixDecorator(jelvix);
         try {

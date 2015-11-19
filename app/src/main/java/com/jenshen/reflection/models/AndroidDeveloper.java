@@ -1,10 +1,10 @@
-package com.jenshen.reflection.injection;
+package com.jenshen.reflection.models;
 
 
 import com.jenshen.reflection.injection.superDagger.Inject;
 import com.jenshen.reflection.injection.superDagger.InjectHelper;
 
-public class AndroidDeveloper extends Developer{
+public class AndroidDeveloper extends Developer {
 
     @Inject
     private Skill skillFirst;

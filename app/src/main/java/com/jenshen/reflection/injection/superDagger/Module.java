@@ -1,7 +1,7 @@
 package com.jenshen.reflection.injection.superDagger;
 
-import com.jenshen.reflection.injection.AndroidDeveloper;
-import com.jenshen.reflection.injection.Skill;
+import com.jenshen.reflection.models.AndroidDeveloper;
+import com.jenshen.reflection.models.Skill;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

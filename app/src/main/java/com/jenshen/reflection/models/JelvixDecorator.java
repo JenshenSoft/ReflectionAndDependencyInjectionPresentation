@@ -1,4 +1,4 @@
-package com.jenshen.reflection.model;
+package com.jenshen.reflection.models;
 
 public class JelvixDecorator implements IJelvix {
 

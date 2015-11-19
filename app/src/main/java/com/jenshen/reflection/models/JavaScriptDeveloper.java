@@ -1,4 +1,4 @@
-package com.jenshen.reflection.injection;
+package com.jenshen.reflection.models;
 
 
 public class JavaScriptDeveloper extends Developer {
